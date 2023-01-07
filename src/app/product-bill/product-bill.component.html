@@ -1,0 +1,161 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <h4 class="text-center mt-4">SKY DEVICES Product-Bill</h4>
+    <h6 class="text-center">Concating Product Name And Product-Sku</h6>
+    <h6 class="text-center abs ">Form Validation</h6>
+  </div>
+  <div class="row mt-2 m-5">
+    <div class="col-md-12">
+      <form #form="ngForm">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-12" class="text-center">SKY DEVISES E-MALL</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-6">
+
+                        <label for="">Product Name</label>
+                        <input type="text" required #productName="ngModel" name="prdctName" (change)="add()" placeholder=" Product Name"
+                          class="form-control" [(ngModel)]="productObj.productName">
+
+                          <div *ngIf="productName.touched" class="" style="color: red;">
+                            <span class="" *ngIf="productName.errors?.['required']">Required</span>
+                          </div>
+
+
+                        <label for="">Full Product Name</label>
+                        <input type="text" required #fullProductName="ngModel" name="fullProductName"  placeholder="Full Product Name"
+                          class="form-control" [(ngModel)]="productObj.productFullName">
+
+                          <div *ngIf="fullProductName.touched" style="color: red;">
+                            <span *ngIf="fullProductName.errors?.['required']">Required</span>
+                          </div>
+
+                        <label for="">Product Price</label>
+                        <input type="text" required name="enterPrice" #productPrice="ngModel" (change)="cal()" placeholder="Enter Price"
+                          class="form-control" [(ngModel)]="productObj.enterPrice">
+                          <div style="color: red;" *ngIf="fullProductName.touched">
+                            <span *ngIf="productPrice.errors?.['required']">Required</span>
+                          </div>
+
+                        <label for="">Final Price</label>
+                        <input type="text" name="finalPrice" placeholder="Discount" class="form-control"
+                          [(ngModel)]="productObj.totalPrice">
+                      </div>
+
+
+                      <div class="col-md-6">
+
+                        <label for="">Product Sku</label>
+                        <input type="text" required  #productSku="ngModel"  name="productSku" placeholder="Product Sku" (change)="add()" class="form-control" [(ngModel)]="productObj.productSku">
+                        <div *ngIf="productSku.touched" style="color: red;">
+                          <span *ngIf="productSku.errors?.['required']">Required</span>
+                        </div>
+
+
+                        <label for="">Select Product</label>
+                        <select name="selectProduct" required #selectProduct="ngModel" class="form-control" (change)="addOther()"
+                          [(ngModel)]="productObj.selectProduct">
+                          <option value="" selected class="form-control">Select Product</option>
+                          <option value="iPadPro" class="form-control">i Pad Pro</option>
+                          <option value="iPadAir" class="form-control">i pad Air</option>
+                          <option value="samsungS20" class="form-control">Samsung S20 Fe</option>
+                          <option value="Other" class="form-control">Other</option>
+                        </select>
+
+                        <div *ngIf="isOther">
+                          <label for="">Other Product</label>
+                          <input type="text" name="otherProduct"  class="form-control"
+                            [(ngModel)]="productObj.selectProduct">                                       <!--you can use logically----[(ngModel)]=productObj.otherProduct-->
+                        </div>
+                        <div *ngIf="selectProduct.touched">
+                          <span *ngIf="selectProduct.errors?.['required']">Required</span>
+                        </div>
+
+                        <label for="">Enter Max Discount</label>
+                        <input type="text" required #maxDiscount="ngModel" name="dicount" id="" placeholder="Max Discount" class="form-control"
+                          (change)="cal()" [(ngModel)]="productObj.discountPrice">
+
+                          <div *ngIf="maxDiscount.touched">
+                            <span *ngIf="maxDiscount.errors?.['required']">Required</span>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="row text-center">
+              <div class="col-md-12">
+                <button class="btn btn-sm btn-warning mx-2" *ngIf="productObj.productId==0" [disabled]="form.invalid" (click)="onsave()">Save</button>
+                <button class="btn btn-sm btn-warning mx-2" *ngIf="productObj.productId!==0" (click)="onUpdate()" >update</button>
+                <button class="btn btn-sm btn-secondary" (click)="onReset()">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Sr No</th>
+                <th>Product Sku</th>
+                <th>Product Name</th>
+                <th>Full Product Name</th>
+                <th>Select Product</th>
+                <th>Enter Price</th>
+                <th>Enter Max Discount</th>
+                <th>After Disount Price</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of productArray; let sr=index">
+                <td>{{sr+1}}</td>
+                <td>{{item.productSku}}</td>
+                <td>{{item.productName}}</td>
+                <td>{{item.productFullName}}</td>
+                <td>{{item.selectProduct}}</td>
+                <td>{{item.enterPrice}}</td>
+                <td>{{item.discountPrice}}</td>
+                <td>{{item.totalPrice}}</td>
+                <td>
+                  <button class="btn btn-sm btn-warning mx-2" (click)="onEdit(item.productId)">Edit</button>
+                  <button class="btn btn-sm btn-secondary" (click)="onDelete(item.productId)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div>
+  <router-outlet></router-outlet>
+</div>
